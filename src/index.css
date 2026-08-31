@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #FFFDF9;
+    color: #0A0A0A;
+    font-family: 'Outfit', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .dark body {
+    background-color: #121316;
+    color: #FFFFFF;
+  }
+}
+
+/* ============================================
+   Neobrutalism Component Utilities
+   ============================================ */
+
+/* Neo Box - base card */
+.neo-box {
+  @apply bg-white rounded-2xl border-2 border-neo-black transition-all duration-150;
+  box-shadow: 4px 4px 0px 0px #0A0A0A;
+}
+
+.dark .neo-box {
+  @apply bg-neo-darkCard border-white/80;
+  box-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 0.45);
+}
+
+/* Neo Box Hover */
+.neo-box-hover {
+  @apply neo-box;
+}
+.neo-box-hover:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px #0A0A0A;
+}
+.dark .neo-box-hover:hover {
+  box-shadow: 6px 6px 0px 0px rgba(255, 255, 255, 0.65);
+}
+.neo-box-hover:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px #0A0A0A;
+}
+.dark .neo-box-hover:active {
+  box-shadow: 2px 2px 0px 0px rgba(255, 255, 255, 0.3);
+}
+
+/* Neo Button Base */
+.neo-btn {
+  @apply border-2 border-neo-black rounded-xl font-extrabold transition-all duration-100;
+  box-shadow: 2px 2px 0px 0px #0A0A0A;
+}
+.neo-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px #0A0A0A;
+}
+.neo-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.dark .neo-btn {
+  @apply border-white;
+  box-shadow: 2px 2px 0px 0px rgba(255, 255, 255, 0.5);
+}
+.dark .neo-btn:hover {
+  box-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 0.7);
+}
+.dark .neo-btn:active {
+  box-shadow: none;
+}
+
+/* Neo Button Primary */
+.neo-btn-primary {
+  @apply neo-btn bg-neo-terracotta text-white;
+}
+.neo-btn-primary:hover {
+  background-color: #FF6B35;
+}
+
+/* Neo Button Secondary */
+.neo-btn-secondary {
+  @apply neo-btn bg-white text-neo-black;
+}
+.dark .neo-btn-secondary {
+  @apply bg-neo-darkCard text-white border-white/80;
+}
+.neo-btn-secondary:hover {
+  background-color: #F5EFEB;
+}
+.dark .neo-btn-secondary:hover {
+  background-color: #2B2C30;
+}
+
+/* Neo Badge */
+.neo-badge {
+  @apply border-2 border-neo-black rounded-lg font-black text-xs px-2.5 py-0.5 inline-flex items-center gap-1.5;
+  box-shadow: 2px 2px 0px 0px #0A0A0A;
+}
+.dark .neo-badge {
+  @apply border-white/80;
+  box-shadow: 2px 2px 0px 0px rgba(255,255,255,0.4);
+}
+
+/* ============================================
+   Custom Crisp Scrollbar
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F3EFE9;
+  border-left: 2px solid #0A0A0A;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #121316;
+  border-left: 2px solid rgba(255, 255, 255, 0.3);
+}
+::-webkit-scrollbar-thumb {
+  background: #E85D35;
+  border: 2px solid #0A0A0A;
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #FF6B35;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+}
