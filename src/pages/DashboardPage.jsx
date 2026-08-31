@@ -111,14 +111,14 @@ export default function DashboardPage({
       {/* 4 Chunky Neobrutalist Stat Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {/* Current Streak */}
-        <div className="neo-box-hover bg-neo-yellow dark:bg-neo-darkCard text-neo-black dark:text-white p-5 text-center">
-          <div className="w-11 h-11 mx-auto mb-2 rounded-xl bg-neo-black dark:bg-neo-yellow/15 text-neo-yellow border-2 border-neo-black dark:border-neo-yellow/60 flex items-center justify-center shadow-neo-sm dark:shadow-none">
-            <Flame className="w-6 h-6 fill-neo-yellow" />
+        <div className="neo-box-hover bg-white dark:bg-neo-darkCard text-neo-black dark:text-white p-5 text-center">
+          <div className="w-11 h-11 mx-auto mb-2 rounded-xl bg-neo-yellow/20 dark:bg-neo-yellow/15 text-neo-yellow border-2 border-neo-black dark:border-neo-yellow/60 flex items-center justify-center shadow-neo-sm dark:shadow-none">
+            <Flame className="w-6 h-6 fill-neo-yellow text-neo-black dark:text-neo-yellow" />
           </div>
           <div className="text-3xl font-black leading-none text-neo-black dark:text-white">
             {metrics.currentStreak} <span className="text-sm font-extrabold text-neo-black/80 dark:text-neo-yellow">DAYS</span>
           </div>
-          <div className="text-[11px] font-black uppercase tracking-wider mt-1.5 opacity-90 text-neo-black dark:text-sand-200">
+          <div className="text-[11px] font-black uppercase tracking-wider mt-1.5 opacity-90 text-neo-black/80 dark:text-sand-200">
             CURRENT STREAK
           </div>
           <div className="text-[10px] font-extrabold mt-1.5 px-2 py-0.5 bg-neo-black dark:bg-neo-yellow/20 text-white dark:text-neo-yellow border border-transparent dark:border-neo-yellow/50 rounded-md inline-block">
@@ -127,14 +127,14 @@ export default function DashboardPage({
         </div>
 
         {/* Best Streak */}
-        <div className="neo-box-hover bg-neo-orange dark:bg-neo-darkCard text-white p-5 text-center">
-          <div className="w-11 h-11 mx-auto mb-2 rounded-xl bg-white dark:bg-neo-orange/15 text-neo-orange border-2 border-neo-black dark:border-neo-orange/60 flex items-center justify-center shadow-neo-sm dark:shadow-none">
-            <Trophy className="w-6 h-6 stroke-[3]" />
+        <div className="neo-box-hover bg-white dark:bg-neo-darkCard text-neo-black dark:text-white p-5 text-center">
+          <div className="w-11 h-11 mx-auto mb-2 rounded-xl bg-neo-orange/15 dark:bg-neo-orange/15 text-neo-orange border-2 border-neo-black dark:border-neo-orange/60 flex items-center justify-center shadow-neo-sm dark:shadow-none">
+            <Trophy className="w-6 h-6 stroke-[3] text-neo-orange" />
           </div>
-          <div className="text-3xl font-black leading-none text-white">
-            {metrics.longestStreak} <span className="text-sm font-extrabold text-white/90 dark:text-neo-orange">DAYS</span>
+          <div className="text-3xl font-black leading-none text-neo-black dark:text-white">
+            {metrics.longestStreak} <span className="text-sm font-extrabold text-neo-black/80 dark:text-neo-orange">DAYS</span>
           </div>
-          <div className="text-[11px] font-black uppercase tracking-wider mt-1.5 opacity-90 text-white dark:text-sand-200">
+          <div className="text-[11px] font-black uppercase tracking-wider mt-1.5 opacity-90 text-neo-black/80 dark:text-sand-200">
             ALL-TIME BEST
           </div>
           <div className="text-[10px] font-extrabold mt-1.5 px-2 py-0.5 bg-neo-black dark:bg-neo-orange/20 text-white dark:text-neo-orange border border-transparent dark:border-neo-orange/50 rounded-md inline-block">
@@ -143,14 +143,14 @@ export default function DashboardPage({
         </div>
 
         {/* Active Days */}
-        <div className="neo-box-hover bg-neo-mint dark:bg-neo-darkCard text-neo-black dark:text-white p-5 text-center">
-          <div className="w-11 h-11 mx-auto mb-2 rounded-xl bg-neo-black dark:bg-neo-mint/15 text-neo-mint border-2 border-neo-black dark:border-neo-mint/60 flex items-center justify-center shadow-neo-sm dark:shadow-none">
-            <CalendarDays className="w-6 h-6 stroke-[3]" />
+        <div className="neo-box-hover bg-white dark:bg-neo-darkCard text-neo-black dark:text-white p-5 text-center">
+          <div className="w-11 h-11 mx-auto mb-2 rounded-xl bg-neo-mint/20 dark:bg-neo-mint/15 text-neo-mint border-2 border-neo-black dark:border-neo-mint/60 flex items-center justify-center shadow-neo-sm dark:shadow-none">
+            <CalendarDays className="w-6 h-6 stroke-[3] text-neo-black dark:text-neo-mint" />
           </div>
           <div className="text-3xl font-black leading-none text-neo-black dark:text-white">
             {metrics.totalActiveDays}
           </div>
-          <div className="text-[11px] font-black uppercase tracking-wider mt-1.5 opacity-90 text-neo-black dark:text-sand-200">
+          <div className="text-[11px] font-black uppercase tracking-wider mt-1.5 opacity-90 text-neo-black/80 dark:text-sand-200">
             ACTIVE DAYS
           </div>
           <div className="text-[10px] font-extrabold mt-1.5 px-2 py-0.5 bg-neo-black dark:bg-neo-mint/20 text-white dark:text-neo-mint border border-transparent dark:border-neo-mint/50 rounded-md inline-block">
@@ -159,14 +159,14 @@ export default function DashboardPage({
         </div>
 
         {/* Completion Rate */}
-        <div className="neo-box-hover bg-neo-cyan dark:bg-neo-darkCard text-neo-black dark:text-white p-5 text-center">
-          <div className="w-11 h-11 mx-auto mb-2 rounded-xl bg-neo-black dark:bg-neo-cyan/15 text-neo-cyan border-2 border-neo-black dark:border-neo-cyan/60 flex items-center justify-center shadow-neo-sm dark:shadow-none">
-            <Target className="w-6 h-6 stroke-[3]" />
+        <div className="neo-box-hover bg-white dark:bg-neo-darkCard text-neo-black dark:text-white p-5 text-center">
+          <div className="w-11 h-11 mx-auto mb-2 rounded-xl bg-neo-cyan/20 dark:bg-neo-cyan/15 text-neo-cyan border-2 border-neo-black dark:border-neo-cyan/60 flex items-center justify-center shadow-neo-sm dark:shadow-none">
+            <Target className="w-6 h-6 stroke-[3] text-neo-black dark:text-neo-cyan" />
           </div>
           <div className="text-3xl font-black leading-none text-neo-black dark:text-white">
             {metrics.overallCompletionRate}%
           </div>
-          <div className="text-[11px] font-black uppercase tracking-wider mt-1.5 opacity-90 text-neo-black dark:text-sand-200">
+          <div className="text-[11px] font-black uppercase tracking-wider mt-1.5 opacity-90 text-neo-black/80 dark:text-sand-200">
             COMPLETION
           </div>
           <div className="text-[10px] font-extrabold mt-1.5 px-2 py-0.5 bg-neo-black dark:bg-neo-cyan/20 text-white dark:text-neo-cyan border border-transparent dark:border-neo-cyan/50 rounded-md inline-block">

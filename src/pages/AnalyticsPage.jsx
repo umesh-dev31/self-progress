@@ -60,36 +60,36 @@ export default function AnalyticsPage({ data, metrics }) {
 
       {/* 4 Stat Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="neo-box bg-neo-yellow dark:bg-neo-darkCard text-neo-black dark:text-white p-5">
-          <span className="text-[11px] font-black uppercase text-neo-black dark:text-sand-200">CURRENT STREAK</span>
+        <div className="neo-box bg-white dark:bg-neo-darkCard text-neo-black dark:text-white p-5">
+          <span className="text-[11px] font-black uppercase text-neo-black/80 dark:text-sand-200">CURRENT STREAK</span>
           <div className="text-3xl font-black mt-1 text-neo-black dark:text-white">
             🔥 {metrics.currentStreak} <span className="text-sm font-bold text-neo-black/80 dark:text-neo-yellow">DAYS</span>
           </div>
-          <p className="text-[10px] font-extrabold mt-1 text-neo-black/80 dark:text-sand-300">Active consecutive days</p>
+          <p className="text-[10px] font-extrabold mt-1 text-neo-black/70 dark:text-sand-300">Active consecutive days</p>
         </div>
 
-        <div className="neo-box bg-neo-orange dark:bg-neo-darkCard text-white p-5">
-          <span className="text-[11px] font-black uppercase text-white dark:text-sand-200">ALL-TIME BEST</span>
-          <div className="text-3xl font-black mt-1 text-white">
-            🏆 {metrics.longestStreak} <span className="text-sm font-bold text-white/90 dark:text-neo-orange">DAYS</span>
+        <div className="neo-box bg-white dark:bg-neo-darkCard text-neo-black dark:text-white p-5">
+          <span className="text-[11px] font-black uppercase text-neo-black/80 dark:text-sand-200">ALL-TIME BEST</span>
+          <div className="text-3xl font-black mt-1 text-neo-black dark:text-white">
+            🏆 {metrics.longestStreak} <span className="text-sm font-bold text-neo-black/80 dark:text-neo-orange">DAYS</span>
           </div>
-          <p className="text-[10px] font-extrabold mt-1 text-white/80 dark:text-sand-300">Personal streak record</p>
+          <p className="text-[10px] font-extrabold mt-1 text-neo-black/70 dark:text-sand-300">Personal streak record</p>
         </div>
 
-        <div className="neo-box bg-neo-mint dark:bg-neo-darkCard text-neo-black dark:text-white p-5">
-          <span className="text-[11px] font-black uppercase text-neo-black dark:text-sand-200">ACTIVE DAYS</span>
+        <div className="neo-box bg-white dark:bg-neo-darkCard text-neo-black dark:text-white p-5">
+          <span className="text-[11px] font-black uppercase text-neo-black/80 dark:text-sand-200">ACTIVE DAYS</span>
           <div className="text-3xl font-black mt-1 text-neo-black dark:text-white">
             📅 {metrics.totalActiveDays}
           </div>
-          <p className="text-[10px] font-extrabold mt-1 text-neo-black/80 dark:text-sand-300">Lifetime check-ins</p>
+          <p className="text-[10px] font-extrabold mt-1 text-neo-black/70 dark:text-sand-300">Lifetime check-ins</p>
         </div>
 
-        <div className="neo-box bg-neo-cyan dark:bg-neo-darkCard text-neo-black dark:text-white p-5">
-          <span className="text-[11px] font-black uppercase text-neo-black dark:text-sand-200">HOURS INVESTED</span>
+        <div className="neo-box bg-white dark:bg-neo-darkCard text-neo-black dark:text-white p-5">
+          <span className="text-[11px] font-black uppercase text-neo-black/80 dark:text-sand-200">HOURS INVESTED</span>
           <div className="text-3xl font-black mt-1 text-neo-black dark:text-white">
             ⏱️ {metrics.totalHoursSpent} <span className="text-sm font-bold text-neo-black/80 dark:text-neo-cyan">HRS</span>
           </div>
-          <p className="text-[10px] font-extrabold mt-1 text-neo-black/80 dark:text-sand-300">Across all 4 domains</p>
+          <p className="text-[10px] font-extrabold mt-1 text-neo-black/70 dark:text-sand-300">Across all 4 domains</p>
         </div>
       </div>
 
