@@ -11,13 +11,6 @@ import {
 
 const AuthContext = createContext(null);
 
-// Detect mobile browser
-function isMobileDevice() {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-  ) || window.innerWidth < 768;
-}
-
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,36 +36,45 @@ export function AuthProvider({ children }) {
         }
       })
       .catch((err) => {
-        // Only log real errors, not "no redirect result" 
         if (err.code && err.code !== 'auth/popup-closed-by-user') {
           console.error('Redirect sign-in error:', err);
-          setSyncStatus('error');
         }
       });
   }, []);
 
   const loginWithGoogle = async () => {
-    try {
-      setSyncStatus('syncing');
+    setSyncStatus('syncing');
 
-      if (isMobileDevice()) {
-        // Mobile: Use redirect (navigates to Google, then comes back)
-        await signInWithRedirect(auth, googleProvider);
-        // Page will redirect — execution stops here on mobile
+    // Try popup first — works on desktop and many mobile browsers
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      setUser(result.user);
+      setSyncStatus('synced');
+      return result.user;
+    } catch (popupError) {
+      // If popup was blocked/failed on mobile, fall back to redirect
+      const isPopupBlocked = [
+        'auth/popup-blocked',
+        'auth/popup-closed-by-user',
+        'auth/cancelled-popup-request',
+        'auth/internal-error'
+      ].includes(popupError.code);
+
+      if (isPopupBlocked) {
+        console.log('Popup blocked, falling back to redirect...');
+        try {
+          await signInWithRedirect(auth, googleProvider);
+          // Page will redirect — execution stops here
+        } catch (redirectError) {
+          console.error('Redirect sign-in also failed:', redirectError);
+          setSyncStatus('error');
+          alert(`Sign-in failed: ${redirectError.message}`);
+        }
       } else {
-        // Desktop: Use popup (opens Google in a new window)
-        const result = await signInWithPopup(auth, googleProvider);
-        setUser(result.user);
-        setSyncStatus('synced');
-        return result.user;
+        console.error('Google Sign-In Error:', popupError);
+        setSyncStatus('error');
+        alert(`Sign-in failed: ${popupError.message}`);
       }
-    } catch (err) {
-      console.error('Google Sign-In Error:', err);
-      setSyncStatus('error');
-      if (err.code !== 'auth/popup-closed-by-user') {
-        alert(`Sign-in failed: ${err.message}`);
-      }
-      throw err;
     }
   };
 

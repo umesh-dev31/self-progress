@@ -45,7 +45,22 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}']
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        navigateFallbackDenylist: [/^\/__(.*)/],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/.*firebaseapp\.com/,
+            handler: 'NetworkOnly'
+          },
+          {
+            urlPattern: /^https:\/\/.*googleapis\.com/,
+            handler: 'NetworkOnly'
+          },
+          {
+            urlPattern: /^https:\/\/accounts\.google\.com/,
+            handler: 'NetworkOnly'
+          }
+        ]
       }
     })
   ],
