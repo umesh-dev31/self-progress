@@ -2,12 +2,21 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { 
   auth, 
   googleProvider, 
-  signInWithPopup, 
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut, 
   onAuthStateChanged 
 } from '../firebase';
 
 const AuthContext = createContext(null);
+
+// Detect mobile browser
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  ) || window.innerWidth < 768;
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -24,17 +33,42 @@ export function AuthProvider({ children }) {
     return () => unsubscribe();
   }, []);
 
+  // Handle redirect result when coming back from Google sign-in on mobile
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result?.user) {
+          setUser(result.user);
+          setSyncStatus('synced');
+        }
+      })
+      .catch((err) => {
+        // Only log real errors, not "no redirect result" 
+        if (err.code && err.code !== 'auth/popup-closed-by-user') {
+          console.error('Redirect sign-in error:', err);
+          setSyncStatus('error');
+        }
+      });
+  }, []);
+
   const loginWithGoogle = async () => {
     try {
       setSyncStatus('syncing');
-      const result = await signInWithPopup(auth, googleProvider);
-      setUser(result.user);
-      setSyncStatus('synced');
-      return result.user;
+
+      if (isMobileDevice()) {
+        // Mobile: Use redirect (navigates to Google, then comes back)
+        await signInWithRedirect(auth, googleProvider);
+        // Page will redirect — execution stops here on mobile
+      } else {
+        // Desktop: Use popup (opens Google in a new window)
+        const result = await signInWithPopup(auth, googleProvider);
+        setUser(result.user);
+        setSyncStatus('synced');
+        return result.user;
+      }
     } catch (err) {
       console.error('Google Sign-In Error:', err);
       setSyncStatus('error');
-      // If popup was blocked or closed by user, don't throw an alert unless needed
       if (err.code !== 'auth/popup-closed-by-user') {
         alert(`Sign-in failed: ${err.message}`);
       }
