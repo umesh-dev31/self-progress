@@ -50,7 +50,7 @@ export default function App() {
             ...remoteData,
             customHabits: Array.from(habitMap.values()),
             days: { ...(prev.days || {}), ...(remoteData.days || {}) },
-            kanbanTasks: remoteData.kanbanTasks?.length ? remoteData.kanbanTasks : (prev.kanbanTasks || [])
+            kanbanTasks: Array.isArray(remoteData.kanbanTasks) ? remoteData.kanbanTasks : (prev.kanbanTasks || [])
           };
           saveData(merged);
           return merged;

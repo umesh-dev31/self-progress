@@ -58,7 +58,7 @@ export function loadData() {
     return {
       days: parsed.days || {},
       customHabits: parsed.customHabits || [],
-      kanbanTasks: parsed.kanbanTasks || DEFAULT_KANBAN_TASKS,
+      kanbanTasks: Array.isArray(parsed.kanbanTasks) ? parsed.kanbanTasks : DEFAULT_KANBAN_TASKS,
       canvasData: parsed.canvasData || { notes: '', drawings: [] },
       theme: parsed.theme || 'light'
     };
