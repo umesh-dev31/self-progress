@@ -12,8 +12,12 @@ import {
   Moon, 
   Zap,
   X,
-  Smartphone
+  LogOut,
+  Cloud,
+  RefreshCw,
+  Check
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Sidebar({ 
   activePage, 
@@ -24,6 +28,8 @@ export default function Sidebar({
   mobileOpen,
   onCloseMobile
 }) {
+  const { user, loginWithGoogle, logout, syncStatus } = useAuth();
+
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, color: 'bg-neo-yellow' },
     { id: 'habits', label: 'Daily Habits', icon: CheckSquare, badge: metrics.totalHabitsCount > 0 ? `${metrics.selectedCompletedCount}/${metrics.totalHabitsCount}` : null, color: 'bg-neo-mint' },
@@ -55,14 +61,14 @@ export default function Sidebar({
       <aside 
         className={`
           w-72 md:w-64 flex-shrink-0 bg-neo-bg dark:bg-neo-darkBg border-r-2 border-neo-black dark:border-white/80 
-          flex flex-col justify-between p-4 h-screen transition-all duration-200 z-50
+          flex flex-col justify-between p-4 h-screen transition-all duration-200 z-50 overflow-y-auto
           fixed md:sticky top-0 left-0
           ${mobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}
         `}
       >
         <div>
           {/* Neobrutalism App Brand Header */}
-          <div className="flex items-center justify-between gap-3 p-3 mb-6 bg-neo-yellow text-neo-black border-2 border-neo-black rounded-2xl shadow-neo">
+          <div className="flex items-center justify-between gap-3 p-3 mb-4 bg-neo-yellow text-neo-black border-2 border-neo-black rounded-2xl shadow-neo">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-neo-terracotta border-2 border-neo-black flex items-center justify-center text-white shadow-neo-sm">
                 <Zap className="w-5 h-5 fill-white" />
@@ -85,6 +91,64 @@ export default function Sidebar({
             >
               <X className="w-4 h-4 stroke-[3]" />
             </button>
+          </div>
+
+          {/* User Profile / Cloud Sync Box */}
+          <div className="mb-4">
+            {user ? (
+              <div className="bg-white dark:bg-neo-darkCard border-2 border-neo-black dark:border-white/80 rounded-2xl p-2.5 shadow-neo-sm flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  {user.photoURL ? (
+                    <img 
+                      src={user.photoURL} 
+                      alt={user.displayName || 'User'} 
+                      className="w-8 h-8 rounded-full border-2 border-neo-black shrink-0 object-cover"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-neo-cyan border-2 border-neo-black flex items-center justify-center font-black text-xs shrink-0">
+                      {(user.displayName || user.email || 'U').charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <div className="text-xs font-black truncate text-neo-black dark:text-white">
+                      {user.displayName || 'User'}
+                    </div>
+                    <div className="flex items-center gap-1 text-[10px] font-bold">
+                      {syncStatus === 'syncing' ? (
+                        <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                          <RefreshCw className="w-2.5 h-2.5 animate-spin" /> Saving...
+                        </span>
+                      ) : (
+                        <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Cloud Synced
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={logout}
+                  title="Sign Out"
+                  className="p-1.5 hover:bg-rose-100 dark:hover:bg-rose-950/40 text-rose-600 border border-transparent hover:border-rose-500 rounded-lg transition-colors shrink-0"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={loginWithGoogle}
+                className="w-full bg-white dark:bg-neo-darkCard border-2 border-neo-black dark:border-white/80 hover:bg-sand-100 dark:hover:bg-dusk-800 text-neo-black dark:text-white p-2.5 rounded-2xl shadow-neo-sm flex items-center justify-center gap-2 text-xs font-black transition-all hover:translate-x-[-1px] hover:translate-y-[-1px]"
+              >
+                <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/>
+                  <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                </svg>
+                <span>SIGN IN WITH GOOGLE</span>
+              </button>
+            )}
           </div>
 
           {/* Navigation Items */}

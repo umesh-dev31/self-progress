@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import MobileBottomNav from './components/MobileBottomNav';
@@ -11,8 +11,11 @@ import CanvasPage from './pages/CanvasPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import SettingsPage from './pages/SettingsPage';
 import { loadData, saveData, calculateMetrics, getFormattedDate } from './utils/storage';
+import { useAuth } from './context/AuthContext';
+import { db, doc, setDoc, onSnapshot } from './firebase';
 
 export default function App() {
+  const { user, setSyncStatus } = useAuth();
   const [data, setData] = useState(() => loadData());
   const [activePage, setActivePage] = useState('dashboard');
   const [selectedDateStr, setSelectedDateStr] = useState(() => getFormattedDate(new Date()));
@@ -20,10 +23,61 @@ export default function App() {
   const [openHabitForm, setOpenHabitForm] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Auto-save data when updated
+  // Prevent save loops when data is updated from remote Firestore snapshot
+  const isRemoteUpdateRef = useRef(false);
+
+  // Sync with Firestore when user logs in
+  useEffect(() => {
+    if (!user) return;
+
+    const userDocRef = doc(db, 'users', user.uid);
+    const unsubscribe = onSnapshot(userDocRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const remoteData = docSnap.data();
+        isRemoteUpdateRef.current = true;
+        setData(remoteData);
+        saveData(remoteData);
+        setSyncStatus('synced');
+      } else {
+        // Document does not exist in Firestore yet -> seed with current local data
+        setDoc(userDocRef, data, { merge: true })
+          .then(() => setSyncStatus('synced'))
+          .catch((err) => {
+            console.error('Initial cloud save error:', err);
+            setSyncStatus('error');
+          });
+      }
+    }, (error) => {
+      console.error('Firestore listener error:', error);
+      setSyncStatus('error');
+    });
+
+    return () => unsubscribe();
+  }, [user?.uid]);
+
+  // Auto-save data to localStorage and debounce sync to Firestore
   useEffect(() => {
     saveData(data);
-  }, [data]);
+
+    if (isRemoteUpdateRef.current) {
+      isRemoteUpdateRef.current = false;
+      return;
+    }
+
+    if (user) {
+      setSyncStatus('syncing');
+      const timer = setTimeout(async () => {
+        try {
+          await setDoc(doc(db, 'users', user.uid), data, { merge: true });
+          setSyncStatus('synced');
+        } catch (e) {
+          console.error('Error auto-syncing to cloud:', e);
+          setSyncStatus('error');
+        }
+      }, 700);
+      return () => clearTimeout(timer);
+    }
+  }, [data, user]);
 
   // Apply dark theme class to <html>
   useEffect(() => {
