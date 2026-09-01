@@ -35,8 +35,26 @@ export default function App() {
       if (docSnap.exists()) {
         const remoteData = docSnap.data();
         isRemoteUpdateRef.current = true;
-        setData(remoteData);
-        saveData(remoteData);
+        setData((prev) => {
+          // Smart merge: combine local habits with remote habits so nothing is lost
+          const remoteHabits = remoteData.customHabits || [];
+          const localHabits = prev.customHabits || [];
+          const habitMap = new Map();
+          remoteHabits.forEach(h => habitMap.set(h.id, h));
+          localHabits.forEach(h => {
+            if (!habitMap.has(h.id)) habitMap.set(h.id, h);
+          });
+
+          const merged = {
+            ...prev,
+            ...remoteData,
+            customHabits: Array.from(habitMap.values()),
+            days: { ...(prev.days || {}), ...(remoteData.days || {}) },
+            kanbanTasks: remoteData.kanbanTasks?.length ? remoteData.kanbanTasks : (prev.kanbanTasks || [])
+          };
+          saveData(merged);
+          return merged;
+        });
         setSyncStatus('synced');
       } else {
         // Document does not exist in Firestore yet -> seed with current local data
