@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+import MobileBottomNav from './components/MobileBottomNav';
+import PwaInstallBanner from './components/PwaInstallBanner';
 import DashboardPage from './pages/DashboardPage';
 import HabitsPage from './pages/HabitsPage';
 import KanbanPage from './pages/KanbanPage';
@@ -16,6 +18,7 @@ export default function App() {
   const [selectedDateStr, setSelectedDateStr] = useState(() => getFormattedDate(new Date()));
   const [theme, setTheme] = useState(data.theme || 'light');
   const [openHabitForm, setOpenHabitForm] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Auto-save data when updated
   useEffect(() => {
@@ -116,13 +119,18 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex bg-sand-50 dark:bg-dusk-950 text-clay-900 dark:text-sand-100 font-sans transition-colors duration-200">
-      {/* SaaS Left Sidebar */}
+      {/* PWA 1-Tap Install Prompt Banner */}
+      <PwaInstallBanner />
+
+      {/* SaaS Left Sidebar (Responsive Drawer on Mobile, Sticky on Desktop) */}
       <Sidebar
         activePage={activePage}
         setActivePage={setActivePage}
         theme={theme}
         toggleTheme={toggleTheme}
         metrics={metrics}
+        mobileOpen={mobileMenuOpen}
+        onCloseMobile={() => setMobileMenuOpen(false)}
       />
 
       {/* Main Page Area */}
@@ -135,11 +143,20 @@ export default function App() {
             setActivePage('habits');
             setOpenHabitForm(true);
           }}
+          onOpenMobileMenu={() => setMobileMenuOpen(true)}
         />
 
-        <main className="flex-1 p-6 md:p-8 max-w-6xl w-full mx-auto">
+        <main className="flex-1 p-4 sm:p-6 md:p-8 max-w-6xl w-full mx-auto pb-24 md:pb-8">
           {renderActivePage()}
         </main>
+
+        {/* Mobile Bottom Navigation Bar */}
+        <MobileBottomNav
+          activePage={activePage}
+          setActivePage={setActivePage}
+          onOpenMobileMenu={() => setMobileMenuOpen(true)}
+          metrics={metrics}
+        />
       </div>
     </div>
   );
